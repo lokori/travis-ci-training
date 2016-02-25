@@ -1,19 +1,24 @@
 sudo: required
 addons:
   postgresql: '9.3'
-
 services:
- - postgresql
-
+- postgresql
 before_install:
- - sudo apt-get install graphviz
- 
+- sudo apt-get install graphviz
 before_script:
- - psql --file=dev.sql
-
+- psql --file=dev.sql
 script:
- - cd db-docs
- - generate-schemadocs.sh
-
+- cd db-docs
+- generate-schemadocs.sh
 after_script:
-  - ls -latr schemadocs
+- ls -latr schemadocs
+deploy:
+  provider: s3
+  access_key_id: AKIAIZTBD3CEKZLF65DA
+  secret_access_key:
+    secure: Kk8Bt16mgzswMXuo9PpD7QILbR6jVCpWlcVtjETMnW0qzV8eADtjVji4DChUaZyrMhtlHrglxykyDb9zl2xKHTsj46uf4+hU/jgQqu/j6a7sQ3doe8Yo6fNM9uMnV6WGJPd9wEcd3xi/W5gLFYTELJ61WQwfR78wIblvN/4/h+z6TxChui7wujqzg+PztndbaeMHz5gS2O/yIejpFA84oOXSfgev7NbfPTQvP8GmbdsGhW9wZXz67VKLDroPhS316Jt9+rXITUdMaP06abQQ/dPRIFudmEUYDm6cXtU2x6NjrTYBEEL4Ga0Reis0zvMFsks2nm59pVU8v0pyjC9Ot0oR86Cug5eXGbJNnNY9iWzvqaPI8///5x44AnrGLavdu99U7u30vYSD74RdstLcllM3YksYWdnoYATcwWh6DEbk/LCBKeP0/osVHReaLAlWoH7dm6Q+cjEWyRSxoBmv8J4YvIgQpqB5K5r/JxKya76iVmhsYWoXPT3rcV1LY5ePscE3giT/W3G7Tn+sECo3wB+/Sdg3MiFOkHQPMvYW9J68jW6d6pKGOxwKI9DiXoGvlkc2HFTdtbWDZGCYeYJ8eQq60J0JSmELiA2zYXNA8Wyx8qG8KF9ijacQA520BfRD/1IvKiTbomS4sF73/ViDPMrksDztAQA0h+MqLhiq9so=
+  bucket: brothers-of-metal
+  local-dir: schemadocs
+  acl: public_read
+  on:
+    repo: lokori/travis-ci-training
